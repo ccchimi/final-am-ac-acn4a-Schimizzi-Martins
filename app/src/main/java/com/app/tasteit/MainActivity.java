@@ -46,21 +46,21 @@ public class MainActivity extends AppCompatActivity {
 
     private final Object[][] recipesData = {
             {"Spaghetti Bolognesa","Pastas","Clásica pasta italiana con salsa de carne y tomate.",
-                    "https://images.unsplash.com/photo-1601924638867-3ec62c1aa5b1","30 min"},
+                    "https://cdn.stoneline.de/media/c5/63/4f/1727429313/spaghetti-bolognese.jpeg?ts=1727429313","30 min"},
             {"Fettuccine Alfredo","Pastas","Crema, manteca y parmesano para una salsa sedosa.",
-                    "https://images.unsplash.com/photo-1589302168068-964664d93dc0","25 min"},
+                    "https://www.thespruceeats.com/thmb/gTjo1gnOuBEVJsttgDW2JljvKY0=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/shrimp-fettuccine-alfredo-recipe-5205738-hero-01-1a40571b0e3e4a17ab768b4d700c7836.jpg","25 min"},
             {"Lasagna de Verduras","Pastas","Capas de vegetales asados y bechamel.",
-                    "https://images.unsplash.com/photo-1603133872878-684f589c24f0","40 min"},
+                    "https://www.bekiacocina.com/images/cocina/0000/976-h.jpg","40 min"},
             {"Pollo al horno","Carnes","Jugoso pollo al horno con especias.",
-                    "https://images.unsplash.com/photo-1604908816370-9c2b6f3f2d2f","50 min"},
+                    "https://i.ytimg.com/vi/DBgGtCWWD5Q/maxresdefault.jpg","50 min"},
             {"Asado clásico","Carnes","Costillar con chimichurri y fuego lento.",
-                    "https://images.unsplash.com/photo-1613145997970-db84a7975fbb","2 hs"},
+                    "https://www.res.com.ar/media/catalog/product/cache/6c63de560a15562fe08de38c3c766637/a/s/asado_clasico_l.jpg","2 hs"},
             {"Ensalada César","Ensaladas","Lechuga, pollo, crutones y aderezo César.",
-                    "https://images.unsplash.com/photo-1555939594-58d7cb561ad1","15 min"},
+                    "https://www.goodnes.com/sites/g/files/jgfbjl321/files/srh_recipes/755f697272cbcdc6e5df2adb44b1b705.jpg","15 min"},
             {"Tarta de Manzana","Postres","Masa hojaldrada y relleno de manzana.",
-                    "https://images.unsplash.com/photo-1601004890684-d8cbf643f5f2","1h"},
+                    "https://cdn0.recetasgratis.net/es/posts/2/6/2/tarta_de_manzana_de_la_abuela_59262_orig.jpg","1h"},
             {"Paella Valenciana","Arroces","Arroz con mariscos, pollo y vegetales.",
-                    "https://images.unsplash.com/photo-1604908177225-1e29cf8c2c4c","1h 15min"}
+                    "https://chefstv.net/wp-content/uploads/2024/04/0178-paella-valenciana-chefstv-wide-web.webp","1h 15min"}
     };
 
     private RecipeAdapter adapter;
