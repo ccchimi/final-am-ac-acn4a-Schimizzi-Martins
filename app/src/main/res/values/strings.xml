@@ -37,8 +37,13 @@
     <string name="recipe_back">Volver</string>
     <string name="recipe_add_fav">⭐ Favorito</string>
     <string name="recipe_remove_fav">❤️ Quitar de favoritos</string>
+
+    <!-- Cambiar contraseña -->
     <string name="change_password_title">Cambiar contraseña</string>
     <string name="change_password_message">Ingresa la nueva contraseña para %1$s</string>
     <string name="accept">Aceptar</string>
     <string name="cancel">Cancelar</string>
+
+    <!-- API -->
+    <string name="error_loading_recipes">Error al cargar recetas</string>
 </resources>

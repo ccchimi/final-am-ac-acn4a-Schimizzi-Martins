@@ -28,6 +28,10 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class RecipesActivity extends AppCompatActivity {
 
     EditText etSearch;
@@ -44,20 +48,8 @@ public class RecipesActivity extends AppCompatActivity {
             "Arroces", "Ensaladas", "Pescados & Mariscos", "Tapas & Snacks", "Sin TACC"
     };
 
-    private final Object[][] recipesData = {
-            {"Spaghetti Bolognesa","Pastas","Clásica pasta italiana con salsa de carne y tomate.",
-                    "https://cdn.stoneline.de/media/c5/63/4f/1727429313/spaghetti-bolognese.jpeg?ts=1727429313","30 min"},
-            {"Fettuccine Alfredo","Pastas","Crema, manteca y parmesano para una salsa sedosa.",
-                    "https://www.thespruceeats.com/thmb/gTjo1gnOuBEVJsttgDW2JljvKY0=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/shrimp-fettuccine-alfredo-recipe-5205738-hero-01-1a40571b0e3e4a17ab768b4d700c7836.jpg","25 min"},
-            {"Lasagna de Verduras","Pastas","Capas de vegetales asados y bechamel.",
-                    "https://www.bekiacocina.com/images/cocina/0000/976-h.jpg","40 min"},
-            {"Pollo al horno","Carnes","Jugoso pollo al horno con especias.",
-                    "https://i.ytimg.com/vi/DBgGtCWWD5Q/maxresdefault.jpg","50 min"},
-            {"Asado clásico","Carnes","Costillar con chimichurri y fuego lento.",
-                    "https://www.res.com.ar/media/catalog/product/cache/6c63de560a15562fe08de38c3c766637/a/s/asado_clasico_l.jpg","2 hs"},
-            {"Ensalada César","Ensaladas","Lechuga, pollo, crutones y aderezo César.",
-                    "https://www.goodnes.com/sites/g/files/jgfbjl321/files/srh_recipes/755f697272cbcdc6e5df2adb44b1b705.jpg","15 min"}
-    };
+    // Lista principal que viene de la API
+    private List<Recipe> allRecipes = new ArrayList<>();
 
     private RecipeAdapter adapter;
     private String activeCategory = null;
@@ -91,8 +83,12 @@ public class RecipesActivity extends AppCompatActivity {
             }
             else if (id == R.id.nav_recetas) {
                 showingFavorites = false;
-                adapter.setRecipes(getAllRecipes());
-                createCategoryButtons();
+                if (allRecipes.isEmpty()) {
+                    loadRecipesFromApi();
+                } else {
+                    adapter.setRecipes(getAllRecipes());
+                    createCategoryButtons();
+                }
             }
             else if (id == R.id.nav_favoritos) {
                 showingFavorites = true;
@@ -115,25 +111,32 @@ public class RecipesActivity extends AppCompatActivity {
         rvRecipes = findViewById(R.id.rvRecipes);
 
         rvRecipes.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new RecipeAdapter(this, showingFavorites ? getFavoriteRecipes() : getAllRecipes(), showingFavorites);
+        adapter = new RecipeAdapter(this, new ArrayList<>(), showingFavorites);
         rvRecipes.setAdapter(adapter);
 
-        createCategoryButtons();
+        if (showingFavorites) {
+            loadFavorites();
+        } else {
+            loadRecipesFromApi();
+        }
 
         btnSearch.setOnClickListener(v -> {
             String q = etSearch.getText().toString().trim().toLowerCase();
-            if (q.isEmpty()) adapter.setRecipes(showingFavorites ? getFavoriteRecipes() : getAllRecipes());
-            else adapter.setRecipes(searchRecipes(q));
+            if (q.isEmpty()) {
+                adapter.setRecipes(showingFavorites ? getFavoriteRecipes() : getAllRecipes());
+            } else {
+                adapter.setRecipes(searchRecipes(q));
+            }
         });
 
         ImageView ivAccount = findViewById(R.id.ivAccount);
         ivAccount.setOnClickListener(v -> {
             PopupMenu menu = new PopupMenu(this, ivAccount);
-            if(LoginActivity.currentUser == null) menu.getMenu().add("Login");
+            if (LoginActivity.currentUser == null) menu.getMenu().add("Login");
             else menu.getMenu().add("Logout");
 
             menu.setOnMenuItemClickListener(item -> {
-                if(item.getTitle().equals("Login")) {
+                if (item.getTitle().equals("Login")) {
                     startActivity(new Intent(this, LoginActivity.class));
                 } else {
                     Toast.makeText(this, getString(R.string.session_closed), Toast.LENGTH_SHORT).show();
@@ -147,19 +150,46 @@ public class RecipesActivity extends AppCompatActivity {
         });
     }
 
+    // Cargar recetas desde la API (Retrofit)
+    private void loadRecipesFromApi() {
+        RecipesApiService api = RetrofitClient.getApiService();
+
+        api.getRecipes().enqueue(new Callback<List<Recipe>>() {
+            @Override
+            public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    allRecipes = response.body();
+                    adapter.setRecipes(getAllRecipes());
+                    createCategoryButtons();
+                } else {
+                    Toast.makeText(RecipesActivity.this,
+                            getString(R.string.error_loading_recipes),
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Recipe>> call, Throwable t) {
+                t.printStackTrace();
+                Toast.makeText(RecipesActivity.this,
+                        getString(R.string.error_loading_recipes),
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     private List<Recipe> getAllRecipes() {
-        List<Recipe> list = new ArrayList<>();
-        for (Object[] data : recipesData) {
-            list.add(new Recipe((String) data[0], (String) data[2], (String) data[3], (String) data[4]));
-        }
-        return list;
+        return new ArrayList<>(allRecipes);
     }
 
     private List<Recipe> searchRecipes(String q) {
         List<Recipe> list = new ArrayList<>();
-        for (Object[] data : recipesData) {
-            if(((String)data[0]).toLowerCase().contains(q)) {
-                list.add(new Recipe((String)data[0], (String)data[2], (String)data[3], (String)data[4]));
+        List<Recipe> source = showingFavorites ? getFavoriteRecipes() : allRecipes;
+
+        for (Recipe r : source) {
+            if (r.getTitle() != null &&
+                    r.getTitle().toLowerCase().contains(q)) {
+                list.add(r);
             }
         }
         return list;
@@ -167,9 +197,9 @@ public class RecipesActivity extends AppCompatActivity {
 
     private List<Recipe> filterByCategory(String cat) {
         List<Recipe> list = new ArrayList<>();
-        for (Object[] data : recipesData) {
-            if(((String)data[1]).equals(cat)) {
-                list.add(new Recipe((String)data[0], (String)data[2], (String)data[3], (String)data[4]));
+        for (Recipe r : allRecipes) {
+            if (r.getCategory() != null && r.getCategory().equals(cat)) {
+                list.add(r);
             }
         }
         return list;
@@ -177,23 +207,23 @@ public class RecipesActivity extends AppCompatActivity {
 
     private List<Recipe> getFavoriteRecipes() {
         String currentUser = LoginActivity.currentUser;
-        if(currentUser == null) return new ArrayList<>();
+        if (currentUser == null) return new ArrayList<>();
         String key = "favorites_" + currentUser;
         String json = sharedPrefs.getString(key, null);
-        Type type = new TypeToken<List<Recipe>>(){}.getType();
+        Type type = new TypeToken<List<Recipe>>() {}.getType();
         return json == null ? new ArrayList<>() : new Gson().fromJson(json, type);
     }
 
     private void createCategoryButtons() {
         categoriesRow.removeAllViews();
-        if(showingFavorites) return;
+        if (showingFavorites) return;
 
-        for(String cat : categories) {
+        for (String cat : categories) {
             Button b = new Button(this);
             b.setText(cat);
             b.setAllCaps(false);
             b.setOnClickListener(v -> {
-                if(cat.equals(activeCategory)) {
+                if (cat.equals(activeCategory)) {
                     activeCategory = null;
                     adapter.setRecipes(getAllRecipes());
                 } else {
@@ -207,7 +237,7 @@ public class RecipesActivity extends AppCompatActivity {
 
     private void loadFavorites() {
         List<Recipe> favorites = getFavoriteRecipes();
-        if(favorites.isEmpty()) {
+        if (favorites.isEmpty()) {
             Toast.makeText(this, getString(R.string.no_favorites), Toast.LENGTH_SHORT).show();
         }
         adapter.setRecipes(favorites);
@@ -216,7 +246,7 @@ public class RecipesActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if(toggle != null && toggle.onOptionsItemSelected(item)) return true;
+        if (toggle != null && toggle.onOptionsItemSelected(item)) return true;
         return super.onOptionsItemSelected(item);
     }
 }
