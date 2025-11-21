@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <!-- PERMISO NECESARIO PARA CARGAR IMAGENES DESDE INTERNET -->
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -25,18 +25,25 @@
             </intent-filter>
         </activity>
 
+        <!-- HOME -->
         <activity
-            android:name=".SplashActivity"
+            android:name=".MainActivity"
+            android:exported="true" />
+
+        <!-- RECETAS -->
+        <activity
+            android:name=".RecipesActivity"
             android:exported="false" />
 
+        <!-- DETALLE DE RECETA -->
         <activity
             android:name=".RecipeDetailActivity"
             android:exported="false" />
 
-        <!-- MainActivity ya no es launcher -->
         <activity
-            android:name=".MainActivity"
-            android:exported="true" />
+            android:name=".SplashActivity"
+            android:exported="false" />
+
     </application>
 
 </manifest>
