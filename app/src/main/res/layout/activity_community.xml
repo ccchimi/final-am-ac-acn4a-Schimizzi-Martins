@@ -14,7 +14,7 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/secondary"
+            android:background="@color/screenBackground"
             android:padding="@dimen/padding_m">
 
             <!-- Toolbar -->
