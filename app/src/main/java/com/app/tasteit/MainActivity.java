@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(this, RecipesActivity.class));
             }
             else if (id == R.id.nav_comunidad) {
-                Toast.makeText(this, getString(R.string.section_community), Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(this, CommunityActivity.class));
             }
             else if (id == R.id.nav_favoritos) {
                 Intent intent = new Intent(this, RecipesActivity.class);
@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
             menu.show();
         });
 
-        // Botones de accesos rapidos
+        // Botones de accesos rápidos
         findViewById(R.id.btnGoRecipes).setOnClickListener(v ->
                 startActivity(new Intent(this, RecipesActivity.class))
         );
@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         findViewById(R.id.btnCommunity).setOnClickListener(v ->
-                Toast.makeText(this, "Comunidad próximamente 🚧", Toast.LENGTH_SHORT).show()
+                startActivity(new Intent(this, CommunityActivity.class))
         );
 
         // HERO: cargar imagen de fondo con Glide

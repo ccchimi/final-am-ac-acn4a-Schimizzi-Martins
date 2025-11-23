@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/margin_m"
+    app:cardCornerRadius="@dimen/card_radius_large"
+    app:cardElevation="@dimen/card_elevation"
+    android:foreground="?attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/padding_m">
+
+        <ImageView
+            android:id="@+id/communityImage"
+            android:layout_width="@dimen/recipe_image_size"
+            android:layout_height="@dimen/recipe_image_size"
+            android:scaleType="centerCrop"
+            android:adjustViewBounds="true"
+            android:src="@drawable/tastel"
+            android:background="@drawable/edit_text_background"
+            android:clipToOutline="true"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_toEndOf="@id/communityImage"
+            android:layout_marginStart="@dimen/margin_m"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/communityTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Título de receta"
+                android:textStyle="bold"
+                android:textSize="@dimen/text_medium"
+                android:textColor="@color/textPrimary"
+                android:maxLines="1"
+                android:ellipsize="end"/>
+
+            <TextView
+                android:id="@+id/communityAuthor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@autor"
+                android:textSize="@dimen/text_small"
+                android:textColor="@color/secondary"
+                android:layout_marginTop="@dimen/margin_xs"/>
+
+            <TextView
+                android:id="@+id/communityDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Descripción breve..."
+                android:textSize="@dimen/text_normal"
+                android:textColor="@color/textSecondary"
+                android:layout_marginTop="@dimen/margin_xs"
+                android:maxLines="2"
+                android:ellipsize="end"/>
+
+            <TextView
+                android:id="@+id/communityTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tiempo: 20 min"
+                android:textSize="@dimen/text_small"
+                android:textColor="@color/textSecondary"
+                android:layout_marginTop="@dimen/margin_xs"/>
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/btnFavFromCommunity"
+            android:layout_width="@dimen/icon_size"
+            android:layout_height="@dimen/icon_size"
+            android:src="@drawable/favorito"
+            android:contentDescription="Agregar a favoritos"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="@dimen/margin_s"
+            android:layout_marginTop="@dimen/margin_s"/>
+
+    </RelativeLayout>
+
+</com.google.android.material.card.MaterialCardView>

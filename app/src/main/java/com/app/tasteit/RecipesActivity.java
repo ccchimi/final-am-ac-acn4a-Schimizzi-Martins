@@ -90,6 +90,9 @@ public class RecipesActivity extends AppCompatActivity {
                     createCategoryButtons();
                 }
             }
+            else if (id == R.id.nav_comunidad) {
+                startActivity(new Intent(this, CommunityActivity.class));
+            }
             else if (id == R.id.nav_favoritos) {
                 showingFavorites = true;
                 loadFavorites();

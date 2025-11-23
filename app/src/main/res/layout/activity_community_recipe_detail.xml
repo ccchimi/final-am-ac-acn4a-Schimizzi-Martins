@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/padding_m"
+    android:background="@color/secondary"
+    tools:context=".CommunityRecipeDetailActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/detailImage"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/recipe_detail_image_height"
+            android:scaleType="centerCrop"
+            android:src="@drawable/tastel"/>
+
+        <TextView
+            android:id="@+id/detailTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Título"
+            android:textSize="@dimen/text_header"
+            android:textStyle="bold"
+            android:textColor="@color/primary"
+            android:layout_marginTop="@dimen/margin_m"/>
+
+        <TextView
+            android:id="@+id/detailAuthor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@autor"
+            android:textSize="@dimen/text_normal"
+            android:textColor="@color/secondary"
+            android:layout_marginTop="@dimen/margin_xs"/>
+
+        <TextView
+            android:id="@+id/detailTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tiempo: 20 min"
+            android:textSize="@dimen/text_normal"
+            android:textColor="@color/textSecondary"
+            android:layout_marginTop="@dimen/margin_xs"/>
+
+        <TextView
+            android:id="@+id/detailDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Descripción..."
+            android:textSize="@dimen/text_medium"
+            android:textColor="@color/textPrimary"
+            android:layout_marginTop="@dimen/margin_m"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="@dimen/margin_l">
+
+            <Button
+                android:id="@+id/btnFav"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Agregar a favoritos"
+                android:backgroundTint="@color/primary"
+                android:textColor="@color/white"
+                android:layout_marginEnd="@dimen/margin_s"/>
+
+            <Button
+                android:id="@+id/btnDownload"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Descargar"
+                android:backgroundTint="@color/secondary"
+                android:textColor="@color/white"
+                android:layout_marginEnd="@dimen/margin_s"/>
+
+            <Button
+                android:id="@+id/btnEdit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Editar"
+                android:backgroundTint="@color/textSecondary"
+                android:textColor="@color/white"/>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btnBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/recipe_back"
+            android:layout_marginTop="@dimen/margin_m"/>
+
+    </LinearLayout>
+</ScrollView>

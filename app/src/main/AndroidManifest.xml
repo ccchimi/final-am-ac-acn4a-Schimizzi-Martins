@@ -40,8 +40,19 @@
             android:name=".RecipeDetailActivity"
             android:exported="false" />
 
+        <!-- SPLASH -->
         <activity
             android:name=".SplashActivity"
+            android:exported="false" />
+
+        <!-- COMUNIDAD / FORO -->
+        <activity
+            android:name=".CommunityActivity"
+            android:exported="false" />
+
+        <!-- DETALLE DE RECETA DE COMUNIDAD -->
+        <activity
+            android:name=".CommunityRecipeDetailActivity"
             android:exported="false" />
 
     </application>
