@@ -138,23 +138,23 @@ public class CommunityActivity extends AppCompatActivity {
         list.add(new CommunityRecipe(
                 "Tostadas francesas rellenas",
                 "Pan brioche relleno con dulce de leche y bañado en huevo, leche y canela. Ideal para un brunch potente.",
-                "https://images.pexels.com/photos/4109990/pexels-photo-4109990.jpeg",
+                "https://gourmet.iprospect.cl/wp-content/uploads/2014/05/tostadas-francesas.jpg",
                 "20 min",
-                "Usuario prueba 1"
+                "Prueba 1"
         ));
 
         list.add(new CommunityRecipe(
                 "Bowl veggie de garbanzos",
                 "Garbanzos especiados al horno, mix de hojas verdes, palta, tomate cherry y aderezo de tahini.",
-                "https://images.pexels.com/photos/1640770/pexels-photo-1640770.jpeg",
+                "https://d36fw6y2wq3bat.cloudfront.net/recipes/bowl-de-garbanzos-y-quinua/900/bowl-de-garbanzos-y-quinua_version_1652869666.jpg",
                 "25 min",
-                "Usuario prueba 2"
+                "Prueba 2"
         ));
 
         list.add(new CommunityRecipe(
                 "Pasta cremosa de una sola olla",
                 "Fideos, caldo, crema y parmesano: todo en una sola olla, sin colar. Súper rápida para los días apurados.",
-                "https://images.pexels.com/photos/6287521/pexels-photo-6287521.jpeg",
+                "https://i.redd.it/ue8ohpgxcwac1.jpeg",
                 "30 min",
                 "admin (editable)"
         ));
