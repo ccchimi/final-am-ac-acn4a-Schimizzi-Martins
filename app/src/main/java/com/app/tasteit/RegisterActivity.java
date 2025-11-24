@@ -1,9 +1,10 @@
 package com.app.tasteit;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Patterns;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -35,65 +36,58 @@ public class RegisterActivity extends AppCompatActivity {
         etUsername = findViewById(R.id.etRegUsername);
         etEmail = findViewById(R.id.etRegEmail);
         etPassword = findViewById(R.id.etRegPassword);
-
         btnRegister = findViewById(R.id.btnRegisterUser);
 
-        btnRegister.setOnClickListener(v -> registerUser());
+        btnRegister.setOnClickListener(v -> createAccount());
     }
 
-    private void registerUser() {
-        String firstName = etFirstName.getText().toString().trim();
-        String lastName = etLastName.getText().toString().trim();
+    private void createAccount() {
+        String first = etFirstName.getText().toString().trim();
+        String last = etLastName.getText().toString().trim();
         String username = etUsername.getText().toString().trim();
         String email = etEmail.getText().toString().trim();
-        String pass = etPassword.getText().toString().trim();
+        String password = etPassword.getText().toString().trim();
 
-        if (firstName.isEmpty() || lastName.isEmpty() || username.isEmpty() ||
-                email.isEmpty() || pass.isEmpty()) {
+        if (first.isEmpty() || last.isEmpty() || username.isEmpty() ||
+                email.isEmpty() || password.isEmpty()) {
             Toast.makeText(this, "Completá todos los campos", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            etEmail.setError("Email inválido");
+        if (password.length() < 6) {
+            Toast.makeText(this, "La contraseña debe tener mínimo 6 caracteres", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        if (pass.length() < 6) {
-            etPassword.setError("Mínimo 6 caracteres");
-            return;
-        }
-
-        btnRegister.setEnabled(false);
-
-        // 1) Crear usuario en Auth
-        auth.createUserWithEmailAndPassword(email, pass)
+        auth.createUserWithEmailAndPassword(email, password)
                 .addOnSuccessListener(result -> {
+
                     String uid = result.getUser().getUid();
 
-                    // 2) Guardar perfil en Firestore
-                    Map<String, Object> data = new HashMap<>();
-                    data.put("firstName", firstName);
-                    data.put("lastName", lastName);
-                    data.put("username", username);
-                    data.put("email", email);
-                    data.put("createdAt", System.currentTimeMillis());
+                    Map<String, Object> userData = new HashMap<>();
+                    userData.put("uid", uid);
+                    userData.put("firstName", first);
+                    userData.put("lastName", last);
+                    userData.put("username", username);
+                    userData.put("email", email);
+                    userData.put("createdAt", System.currentTimeMillis());
 
-                    db.collection("users")
+                    db.collection("usuarios")
                             .document(uid)
-                            .set(data)
-                            .addOnSuccessListener(a -> {
-                                Toast.makeText(this, "Usuario registrado correctamente", Toast.LENGTH_SHORT).show();
+                            .set(userData)
+                            .addOnSuccessListener(aVoid -> {
+                                Toast.makeText(this, "Cuenta creada con éxito", Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(this, LoginActivity.class));
                                 finish();
                             })
-                            .addOnFailureListener(e -> {
-                                Toast.makeText(this, "Error guardando datos: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                btnRegister.setEnabled(true);
-                            });
+                            .addOnFailureListener(e ->
+                                    Toast.makeText(this, "Error guardando datos: " + e.getMessage(), Toast.LENGTH_SHORT).show());
                 })
                 .addOnFailureListener(e -> {
-                    Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                    btnRegister.setEnabled(true);
+                    String msg = e.getMessage();
+                    if (msg.contains("email address is already in use"))
+                        msg = "Ese email ya está registrado.";
+                    Toast.makeText(this, "Error: " + msg, Toast.LENGTH_SHORT).show();
                 });
     }
 }
