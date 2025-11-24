@@ -50,7 +50,6 @@ public class CommunityRecipeAdapter extends RecyclerView.Adapter<CommunityRecipe
 
         holder.title.setText(recipe.getTitle());
         holder.author.setText("Por @" + recipe.getAuthor());
-        // Solo el tiempo, así queda bien con el layout pro
         holder.time.setText(recipe.getCookingTime());
         holder.description.setText(recipe.getDescription());
 
