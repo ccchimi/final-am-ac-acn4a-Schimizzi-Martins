@@ -151,12 +151,13 @@ public class CommunityActivity extends AppCompatActivity {
                 "Prueba 2"
         ));
 
+        // Editable
         list.add(new CommunityRecipe(
                 "Pasta cremosa de una sola olla",
                 "Fideos, caldo, crema y parmesano: todo en una sola olla, sin colar. Súper rápida para los días apurados.",
                 "https://i.redd.it/ue8ohpgxcwac1.jpeg",
                 "30 min",
-                "admin (editable)"
+                "admin"
         ));
 
         return list;
