@@ -1,5 +1,6 @@
 package com.app.tasteit;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -7,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -26,7 +28,7 @@ public class CommunityRecipeDetailActivity extends AppCompatActivity {
 
     private ImageView detailImage;
     private TextView detailTitle, detailAuthor, detailTime, detailDescription;
-    private Button btnFav, btnDownload, btnEdit, btnBack;
+    private Button btnFav, btnDownload, btnEdit, btnBack, btnDelete;
 
     private CommunityRecipe recipe;
 
@@ -34,6 +36,9 @@ public class CommunityRecipeDetailActivity extends AppCompatActivity {
     private FirebaseAuth auth;
 
     private Gson gson = new Gson();
+
+    // Necesario para borrar en Firestore
+    private String recipeId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,15 +60,20 @@ public class CommunityRecipeDetailActivity extends AppCompatActivity {
         btnDownload = findViewById(R.id.btnDownload);
         btnEdit = findViewById(R.id.btnEdit);
         btnBack = findViewById(R.id.btnBack);
+        btnDelete = findViewById(R.id.btnDelete);
 
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
 
-        String recipeId = getIntent().getStringExtra("recipe_id");
+        // ID de la receta que viene desde CommunityActivity / adapter
+        recipeId = getIntent().getStringExtra("recipe_id");
         if (recipeId == null || recipeId.isEmpty()) {
             finish();
             return;
         }
+
+        // Ocultamos el boton de borrar hasta saber si es del dueño
+        btnDelete.setVisibility(View.GONE);
 
         loadRecipeFromFirestore(recipeId);
 
@@ -96,6 +106,19 @@ public class CommunityRecipeDetailActivity extends AppCompatActivity {
                         Toast.LENGTH_SHORT).show();
             }
         });
+
+        btnDelete.setOnClickListener(v -> {
+            if (recipe == null || auth.getCurrentUser() == null) return;
+
+            String uid = auth.getCurrentUser().getUid();
+            if (recipe.getAuthorId() != null && recipe.getAuthorId().equals(uid)) {
+                confirmDelete();
+            } else {
+                Toast.makeText(this,
+                        "No podés eliminar esta receta (no sos el dueño).",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void loadRecipeFromFirestore(String recipeId) {
@@ -118,7 +141,7 @@ public class CommunityRecipeDetailActivity extends AppCompatActivity {
                     recipe.setId(doc.getId());
 
                     bindData();
-                    updateEditButtonState();
+                    updateButtonsState();
                 })
                 .addOnFailureListener(e -> {
                     Toast.makeText(this,
@@ -141,21 +164,64 @@ public class CommunityRecipeDetailActivity extends AppCompatActivity {
                 .into(detailImage);
     }
 
-    private void updateEditButtonState() {
+    private void updateButtonsState() {
         if (auth.getCurrentUser() == null || recipe == null) {
             btnEdit.setEnabled(false);
             btnEdit.setAlpha(0.4f);
+            btnDelete.setVisibility(View.GONE);
             return;
         }
 
         String uid = auth.getCurrentUser().getUid();
-        if (recipe.getAuthorId() != null && recipe.getAuthorId().equals(uid)) {
+        boolean isOwner = recipe.getAuthorId() != null && recipe.getAuthorId().equals(uid);
+
+        if (isOwner) {
             btnEdit.setEnabled(true);
             btnEdit.setAlpha(1f);
+            btnDelete.setVisibility(View.VISIBLE);
         } else {
             btnEdit.setEnabled(false);
             btnEdit.setAlpha(0.4f);
+            btnDelete.setVisibility(View.GONE);
         }
+    }
+
+    // ----- Confirmacion y borrado -----
+
+    private void confirmDelete() {
+        new AlertDialog.Builder(this)
+                .setTitle("Eliminar receta")
+                .setMessage("¿Seguro que querés eliminar esta receta?")
+                .setPositiveButton("Eliminar", (dialog, which) -> deleteRecipe())
+                .setNegativeButton("Cancelar", null)
+                .show();
+    }
+
+    private void deleteRecipe() {
+        if (auth.getCurrentUser() == null || recipeId == null) return;
+
+        String uid = auth.getCurrentUser().getUid();
+
+        // Primero borramos de comunidad
+        db.collection("comunidad")
+                .document(recipeId)
+                .delete()
+                .addOnSuccessListener(v -> {
+                    // Luego borramos de usuarios/{uid}/recetas
+                    db.collection("usuarios")
+                            .document(uid)
+                            .collection("recetas")
+                            .document(recipeId)
+                            .delete();
+
+                    Toast.makeText(this, "Receta eliminada", Toast.LENGTH_SHORT).show();
+                    finish();
+                })
+                .addOnFailureListener(e ->
+                        Toast.makeText(this,
+                                "Error al eliminar receta: " + e.getMessage(),
+                                Toast.LENGTH_SHORT).show()
+                );
     }
 
     // ----- Favoritos -----
@@ -200,7 +266,7 @@ public class CommunityRecipeDetailActivity extends AppCompatActivity {
     private void downloadRecipe(CommunityRecipe cRecipe) {
         String body = cRecipe.getTitle() + "\n\n" +
                 "Autor: @" + cRecipe.getAuthor() + "\n" +
-                "Tiempo: " + cRecipe.getCookingTime() + "\n\n" +
+                "Tiempo: " + cRecipe.getCookingTime() + " min\n\n" +
                 cRecipe.getDescription();
 
         Intent share = new Intent(Intent.ACTION_SEND);
