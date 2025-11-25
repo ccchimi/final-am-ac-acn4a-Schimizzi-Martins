@@ -59,7 +59,6 @@ public class CommunityRecipeAdapter extends RecyclerView.Adapter<CommunityRecipe
                 .error(R.drawable.tastel)
                 .into(holder.image);
 
-        // Estado inicial del favorito segun si esta en SharedPreferences
         boolean isFav = isInFavorites(recipe);
         holder.setFavorite(isFav);
 
@@ -81,7 +80,7 @@ public class CommunityRecipeAdapter extends RecyclerView.Adapter<CommunityRecipe
                 // Agregar a favoritos
                 addToFavoritesFromCommunity(recipe);
                 holder.setFavorite(true);
-                // El método de abajo ya muestra el Toast de agregado
+                // El mensaje del metodo de abajo ya muestra el Toast de agregado
             }
         });
     }
