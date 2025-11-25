@@ -1,77 +1,210 @@
-# Tastel – App Móvil de Recetas
-
-Repositorio del **Parcial 1 - Aplicaciones Móviles (Da Vinci)**  
-Profesor: Sergio Daniel Medina
-Integrantes: Franco Martin Schimizzi y Melina Rocio Martins
-
----
-
-## Descripción
-
-Tastel es una aplicación móvil de recetas pensada para simplificar la vida del usuario a la hora de cocinar.  
-La app permite buscar recetas, filtrarlas por categorías, ver un detalle con imagen y descripción, y guardar favoritas.
+# 📱 Tastel – App Móvil de Recetas  
+### Proyecto Académico – Parcial I y II  
+**Materia:** Aplicaciones Móviles (Da Vinci)  
+**Profesor:** Sergio Daniel Medina  
+**Integrantes:** Franco Martín Schimizzi · Melina Rocío Martins
 
 ---
 
-## Funcionalidades principales
+# Descripción general
 
-- **Pantallas implementadas**
-    - **Splash Screen** con logo.
-    - **Login** con navegación hacia la app.
-    - **Home / Recetas** con buscador, categorías dinámicas (chips) y listado de recetas.
-    - **Detalle de receta** al tocar cualquier card.
-    - **Drawer lateral** con secciones: Recetas, Comunidad, Listas, Cerrar Sesión.
+**Tastel** es una aplicación móvil de recetas diseñada para ofrecer una experiencia completa:  
+buscar, filtrar, visualizar, guardar favoritas, publicar recetas en comunidad, gestionar perfil y administrar contenido personal.
 
-- **Interactividad**
-    - Búsqueda de recetas por nombre.
-    - Filtrado por categorías (Pastas, Carnes, Veggie, Postres, Sopas, Arroces, Ensaladas, Pescados, Tapas & Snacks, Sin TACC).
-    - Cards de recetas clickeables que llevan a la pantalla de detalle.
-    - Botón de logout que regresa a la pantalla de Login.
+Este README documenta el **Proyecto Completo**, incluyendo todo lo desarrollado en:
 
-- **Persistencia**
-    - Uso de `SharedPreferences` para mantener favoritos (ejemplo en `RecipeAdapter`).
-
-- **Diseño**
-    - Uso combinado de `ConstraintLayout` y `LinearLayout`.
-    - Estilos personalizados (`styles.xml`, `colors.xml`).
-    - Material Design Components (Chips, Toolbar, NavigationView, CardView).
+- ✅ **Parcial I (versión local y catálogo de recetas)**
+- ✅ **Parcial II (Firebase Auth, Firestore, Comunidad, Perfil editable, CRUD completo)**
 
 ---
 
-## Tecnologías usadas
+# Funcionalidades implementadas
 
-- **Lenguaje:** Java (Android)
-- **IDE:** Android Studio (Gradle)
-- **UI:** Material Design Components
-- **Persistencia:** SharedPreferences (para favoritos)
-- **Gestión:** GitHub + conventional commits
+## 🟢 **Parcial I – Funcionalidades base**
+
+### Navegación y pantallas
+- Splash screen animada.  
+- Login hacia Home.  
+- Home con buscador, categorías dinámicas (Chips) y listado de recetas.  
+- Detalle visual de receta con imagen, descripción y tiempo.  
+- Drawer lateral con navegación entre secciones.
+
+### Búsqueda y filtrado
+- Búsqueda por nombre.  
+- Filtros por categorías (Pastas, Carnes, Veggie, Postres, etc.).  
+- Cards clickeables que llevan al detalle.
+
+### Favoritos (versión inicial)
+- Persistencia usando `SharedPreferences`.  
+- Favoritos por usuario según login.
+
+### Diseño
+- Uso de Material Design Components.
+- CardView, Chips, Toolbar, NavigationView.
+- Layouts mixtos (Linear + Constraint).
+- Paleta y estilos en `colors.xml`, `styles.xml`, `dimens.xml`.
 
 ---
 
-## Estructura de proyecto
+# 🟣 **Parcial II – Expansión completa con Firebase**
+
+El segundo parcial transformó por completo la app agregando **backend real (Firebase)** y **secciones dinámicas**.
+
+## **Autenticación Firebase (Email + Usuario + Password)**
+
+- Registro con:
+  - Nombre  
+  - Apellido  
+  - Email  
+  - Username único  
+  - Password  
+- Login por:
+  - Email  
+  - Username (búsqueda en Firestore → login real por email)
+- Recuperación de contraseña (username o email).
+
+## **Perfil del usuario**
+
+- Edición de:
+  - Nombre  
+  - Apellido  
+  - Email (con reautenticación y verificación obligatoria)  
+  - Contraseña  
+- Username fijo e inmutable.  
+- Actualización sincronizada en:
+  - Firebase Auth  
+  - Firestore (`usuarios/{uid}`)
+
+## **Publicación de recetas – Comunidad (Firestore)**
+
+Los usuarios pueden:
+- Crear recetas propias.
+- Editar las que les pertenecen.
+- Eliminar recetas con confirmación.
+- Cada receta incluye:
+  - Título  
+  - Descripción  
+  - Imagen  
+  - Tiempo (control con flechas ↑↓ y mínimo 1 min)  
+  - Autor (username @usuario)  
+  - Datos internos para Firestore:
+    - `authorId`
+    - `authorEmail`
+    - `createdAt`
+- Se guardan tanto en:
+  - `comunidad/`
+  - `usuarios/{uid}/recetas/`
+
+## **Feed dinámico de Comunidad**
+- Listado en tiempo real mediante `addSnapshotListener`.  
+- Ordenado por fecha (`createdAt desc`).  
+- Cards con:
+  - Imagen  
+  - Título  
+  - @autor  
+  - Descripción truncada  
+  - Tiempo  
+- Botón favorito flotante integrado por card.
+
+## **Detalle de receta de comunidad**
+- Imagen grande  
+- Autor con @username  
+- Tiempo formateado  
+- Descripción completa  
+- Acciones:
+  - Agregar a favoritos (versión local)
+  - Descargar / compartir  
+  - Editar si sos dueño  
+  - Eliminar si sos dueño  
+  - Volver
+
+## Favoritos (actualizado)
+- Persistencia por usuario  
+- Compatibilidad con recetas de comunidad  
+- Las recetas importadas desde comunidad agregan automáticamente:
+  - "Subida por @autor"
+
+---
+
+# Tecnologías utilizadas
+
+### **Frontend**
+- Android Studio (Java)
+- XML para layout
+- Material Design Components
+
+### **Backend**
+- Firebase Authentication  
+- Firebase Firestore  
+- Firebase Storage (opcional para imágenes, si se quisiera extender)
+
+### **Persistencia local**
+- `SharedPreferences`  
+- Gson para serialización
+
+### **Gestión del proyecto**
+- GitHub  
+- Conventional commits  
+- Documentación clara y estructurada
+
+---
+
+# Estructura del proyecto
 
 app/
 ├─ java/com.app.tasteit/
-│ ├─ MainActivity.java
 │ ├─ LoginActivity.java
-│ ├─ SplashActivity.java
+│ ├─ RegisterActivity.java
+│ ├─ ProfileActivity.java
+│ ├─ MainActivity.java
+│ ├─ CommunityActivity.java
+│ ├─ CommunityRecipeDetailActivity.java
+│ ├─ RecipeFormActivity.java
 │ ├─ RecipeDetailActivity.java
-│ └─ adapters/RecipeAdapter.java
+│ ├─ models/
+│ │ └─ CommunityRecipe.java
+│ ├─ adapters/
+│ │ ├─ CommunityRecipeAdapter.java
+│ │ └─ RecipeAdapter.java
+│ └─ utils/
+│ └─ AccountMenuHelper.java
 ├─ res/
-│ ├─ layout/ (layouts XML)
-│ ├─ drawable/ (recursos gráficos)
-│ └─ values/ (colors, styles, strings)
+│ ├─ layout/ (XML)
+│ ├─ drawable/
+│ └─ values/ (colors, dimens, strings)
+
 
 ---
 
-## Cómo correr el proyecto
+# Cómo ejecutar el proyecto
 
-1. Clonar el repo:
-  
-   git clone https://github.com/ccchimi/Tastel.git
+1. Clonar repo:
+git clone https://github.com/ccchimi/Tastel.git
+2. Abrir en Android Studio  
+3. Sincronizar con Gradle  
+4. Conectar dispositivo o emulador  
+5. Ejecutar app  
 
-2. Abrir en Android Studio.
+---
 
-3. Sincronizar dependencias con Gradle.
+# Documentación
 
-4. Ejecutar en un emulador Android (SDK 30+) o dispositivo físico.
+Incluye informes oficiales del proyecto:
+- **Parcial I – Informe**
+- **Parcial II – Informe**
+- Mockups completos
+- Screenshots actualizados
+- Explicación técnica detallada
+
+---
+
+# Conclusión
+
+La aplicación **Tastel** pasó de ser un catálogo local de recetas a convertirse en una **plataforma completa con autenticación, perfil, comunidad, CRUD de recetas en la nube y favoritos avanzados**.  
+El proyecto cumple **todos los requisitos del Parcial I y II**, incluye documentación profesional y un desarrollo sólido.
+
+---
+
+# Autores
+- **Franco Martín Schimizzi**
+- **Melina Rocío Martins**
