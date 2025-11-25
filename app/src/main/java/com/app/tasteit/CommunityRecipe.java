@@ -1,8 +1,6 @@
 package com.app.tasteit;
 
 public class CommunityRecipe {
-
-    // ID del documento en Firestore (no hace falta guardarlo en la BD)
     private String id;
 
     private String title;
