@@ -78,10 +78,7 @@ public class CommunityActivity extends AppCompatActivity {
                 intent.putExtra("showFavorites", true);
                 startActivity(intent);
             } else if (id == R.id.nav_logout) {
-                LoginActivity.currentUser = null;
-                Toast.makeText(this, getString(R.string.session_closed), Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(this, LoginActivity.class));
-                finish();
+                LoginActivity.logout(this);
             }
 
             drawerLayout.closeDrawers();

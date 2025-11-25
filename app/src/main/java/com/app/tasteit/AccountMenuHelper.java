@@ -4,7 +4,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
-import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class AccountMenuHelper {
 
@@ -14,7 +18,10 @@ public class AccountMenuHelper {
         ivAccount.setOnClickListener(v -> {
             PopupMenu menu = new PopupMenu(activity, ivAccount);
 
-            if (LoginActivity.currentUser == null) {
+            // Ahora miramos el estado REAL de Firebase
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+            if (user == null) {
                 menu.getMenu().add("Login");
             } else {
                 menu.getMenu().add("Mi perfil");
@@ -26,17 +33,11 @@ public class AccountMenuHelper {
 
                 if (title.equals("Login")) {
                     activity.startActivity(new Intent(activity, LoginActivity.class));
-                }
-                else if (title.equals("Mi perfil")) {
+                } else if (title.equals("Mi perfil")) {
                     activity.startActivity(new Intent(activity, ProfileActivity.class));
-                }
-                else if (title.equals("Logout")) {
-                    Toast.makeText(activity,
-                            activity.getString(R.string.session_closed),
-                            Toast.LENGTH_SHORT).show();
-                    LoginActivity.currentUser = null;
-                    activity.startActivity(new Intent(activity, LoginActivity.class));
-                    activity.finish();
+                } else if (title.equals("Logout")) {
+                    // Centralizamos el logout en LoginActivity
+                    LoginActivity.logout((AppCompatActivity) activity);
                 }
                 return true;
             });
