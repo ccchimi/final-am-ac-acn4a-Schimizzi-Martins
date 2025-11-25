@@ -50,7 +50,7 @@ public class CommunityRecipeAdapter extends RecyclerView.Adapter<CommunityRecipe
 
         holder.title.setText(recipe.getTitle());
         holder.author.setText("Por @" + recipe.getAuthor());
-        holder.time.setText(recipe.getCookingTime());
+        holder.time.setText(recipe.getCookingTime() + " min");
         holder.description.setText(recipe.getDescription());
 
         Glide.with(context)

@@ -65,6 +65,10 @@
             android:name=".CommunityRecipeDetailActivity"
             android:exported="false" />
 
+        <!-- FORMULARIO DE CREACION / EDICION DE RECETAS -->
+        <activity
+            android:name=".RecipeFormActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

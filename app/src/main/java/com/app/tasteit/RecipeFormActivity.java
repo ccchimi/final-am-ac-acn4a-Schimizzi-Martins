@@ -1,10 +1,12 @@
 package com.app.tasteit;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.NumberPicker;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -15,8 +17,9 @@ import java.util.Map;
 
 public class RecipeFormActivity extends AppCompatActivity {
 
-    private EditText etTitle, etDesc, etImage, etTime;
-    private Button btnSave;
+    private EditText etTitle, etDesc, etImage;
+    private NumberPicker npTime;
+    private Button btnSave, btnDelete;
 
     private FirebaseFirestore db;
     private FirebaseAuth auth;
@@ -34,14 +37,25 @@ public class RecipeFormActivity extends AppCompatActivity {
         etTitle = findViewById(R.id.etTitle);
         etDesc  = findViewById(R.id.etDescription);
         etImage = findViewById(R.id.etImageUrl);
-        etTime  = findViewById(R.id.etCookingTime);
+        npTime  = findViewById(R.id.npCookingTime);
         btnSave = findViewById(R.id.btnSaveRecipe);
+        btnDelete = findViewById(R.id.btnDeleteRecipe);
+
+        // Configuracion del NumberPicker
+        npTime.setMinValue(1);
+        npTime.setMaxValue(300);
+        npTime.setWrapSelectorWheel(true);
 
         // Ver si estamos editando
         recipeId = getIntent().getStringExtra("recipeId");
 
         if (recipeId != null) {
             loadRecipe();
+            btnDelete.setVisibility(Button.VISIBLE);
+            btnDelete.setOnClickListener(v -> confirmDelete());
+        } else {
+            // Si es nueva receta, ocultamos el boton de eliminar
+            btnDelete.setVisibility(Button.GONE);
         }
 
         btnSave.setOnClickListener(v -> saveRecipe());
@@ -59,7 +73,20 @@ public class RecipeFormActivity extends AppCompatActivity {
                     etTitle.setText(doc.getString("title"));
                     etDesc.setText(doc.getString("description"));
                     etImage.setText(doc.getString("imageUrl"));
-                    etTime.setText(doc.getString("cookingTime"));
+
+                    String ct = doc.getString("cookingTime");
+                    int minutes = 20;
+
+                    if (ct != null) {
+                        ct = ct.replaceAll("[^0-9]", "");
+                        try {
+                            minutes = Integer.parseInt(ct);
+                        } catch (NumberFormatException ignored) {}
+                    }
+
+                    if (minutes < 1) minutes = 1;
+                    if (minutes > 300) minutes = 300;
+                    npTime.setValue(minutes);
                 })
                 .addOnFailureListener(e ->
                         Toast.makeText(this,
@@ -73,7 +100,7 @@ public class RecipeFormActivity extends AppCompatActivity {
         String title = etTitle.getText().toString().trim();
         String desc  = etDesc.getText().toString().trim();
         String img   = etImage.getText().toString().trim();
-        String time  = etTime.getText().toString().trim();
+        int minutes  = npTime.getValue();
 
         if (title.isEmpty()) { etTitle.setError("Título requerido"); return; }
         if (desc.isEmpty())  { etDesc.setError("Descripción requerida"); return; }
@@ -90,12 +117,12 @@ public class RecipeFormActivity extends AppCompatActivity {
         data.put("title", title);
         data.put("description", desc);
         data.put("imageUrl", img);
-        data.put("cookingTime", time);
+        data.put("cookingTime", String.valueOf(minutes));
 
-        // Autor visible: username si lo tenemos, si no, email
+        // Autor visible: username si lo tenemos, si no, algo generico
         String visibleAuthor = LoginActivity.currentUsername;
         if (visibleAuthor == null || visibleAuthor.isEmpty()) {
-            visibleAuthor = (email != null ? email : "usuario");
+            visibleAuthor = "usuario";
         }
 
         data.put("author", visibleAuthor);
@@ -115,7 +142,7 @@ public class RecipeFormActivity extends AppCompatActivity {
                         // guardamos el ID dentro del documento
                         docRef.update("id", newId);
 
-                        // guardar también en usuarios/{uid}/recetas
+                        // guardar tambien en usuarios/{uid}/recetas
                         db.collection("usuarios")
                                 .document(uid)
                                 .collection("recetas")
@@ -171,5 +198,35 @@ public class RecipeFormActivity extends AppCompatActivity {
                                     Toast.LENGTH_SHORT).show()
                     );
         }
+    }
+
+    private void confirmDelete() {
+        if (recipeId == null || auth.getCurrentUser() == null) return;
+
+        new AlertDialog.Builder(this)
+                .setTitle("Eliminar receta")
+                .setMessage("¿Seguro que querés eliminar esta receta?")
+                .setPositiveButton("Eliminar", (dialog, which) -> deleteRecipe())
+                .setNegativeButton("Cancelar", null)
+                .show();
+    }
+
+    private void deleteRecipe() {
+        String uid = auth.getCurrentUser().getUid();
+
+        // Borrar de comunidad
+        db.collection("comunidad")
+                .document(recipeId)
+                .delete();
+
+        // Borrar de usuarios/{uid}/recetas
+        db.collection("usuarios")
+                .document(uid)
+                .collection("recetas")
+                .document(recipeId)
+                .delete();
+
+        Toast.makeText(this, "Receta eliminada", Toast.LENGTH_SHORT).show();
+        finish();
     }
 }

@@ -13,6 +13,8 @@ import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -25,8 +27,10 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth auth;
     private FirebaseFirestore db;
 
+    // Email actual
     public static String currentUser = null;
 
+    // Para autoria de recetas
     public static String currentUid = null;
     public static String currentUsername = null;
 
@@ -38,17 +42,21 @@ public class LoginActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         db   = FirebaseFirestore.getInstance();
 
-        etIdentifier = findViewById(R.id.etUsername);  // ahora puede ser usuario o email (antes no se podia)
+        etIdentifier = findViewById(R.id.etUsername);  // ahora puede ser usuario o email
         etPassword   = findViewById(R.id.etPassword);
         btnLogin     = findViewById(R.id.btnLogin);
         btnCreateUser = findViewById(R.id.btnCreateUser);
         tvForgot     = findViewById(R.id.tvForgot);
 
         // Si ya esta logueado, lo mando directo al Home
-        if (auth.getCurrentUser() != null) {
-            currentUser = auth.getCurrentUser().getEmail();
+        FirebaseUser user = auth.getCurrentUser();
+        if (user != null) {
+            currentUser = user.getEmail();
+            currentUid  = user.getUid();
+            loadCurrentUserData(user);
             startActivity(new Intent(this, MainActivity.class));
             finish();
+            return;
         }
 
         btnLogin.setOnClickListener(v -> loginUser());
@@ -90,7 +98,6 @@ public class LoginActivity extends AppCompatActivity {
                             return;
                         }
 
-                        // Tomamos el email real de ese username
                         String email = snapshot.getDocuments()
                                 .get(0)
                                 .getString("email");
@@ -115,7 +122,14 @@ public class LoginActivity extends AppCompatActivity {
     private void signInWithEmail(String email, String pass) {
         auth.signInWithEmailAndPassword(email, pass)
                 .addOnSuccessListener(result -> {
-                    currentUser = email;
+                    FirebaseUser user = result.getUser();
+                    if (user != null) {
+                        currentUser = user.getEmail();
+                        currentUid  = user.getUid();
+                        loadCurrentUserData(user);
+                        currentUser = email;
+                    }
+
                     Toast.makeText(this, "Bienvenido " + email, Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(this, MainActivity.class));
                     finish();
@@ -132,6 +146,29 @@ public class LoginActivity extends AppCompatActivity {
                     }
 
                     Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+                });
+    }
+
+    private void loadCurrentUserData(FirebaseUser user) {
+        if (user == null) return;
+
+        String uid = user.getUid();
+
+        db.collection("usuarios")
+                .whereEqualTo("uid", uid)
+                .limit(1)
+                .get()
+                .addOnSuccessListener(snapshot -> {
+                    if (!snapshot.isEmpty()) {
+                        DocumentSnapshot doc = snapshot.getDocuments().get(0);
+                        String username = doc.getString("username");
+                        if (username != null && !username.isEmpty()) {
+                            currentUsername = username;
+                        }
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    // no es grave en realidad, solo no tendriamos username
                 });
     }
 
@@ -157,7 +194,7 @@ public class LoginActivity extends AppCompatActivity {
                                     Toast.LENGTH_SHORT).show()
                     );
         } else {
-            // Si puso username, buscamos su email en Firestore y recién ahi mandamos el mail
+            // Si puso username, buscamos su email en Firestore y recien ahi mandamos el mail real a su casilla de correo
             if (text.isEmpty()) {
                 Toast.makeText(this, "Ingresá usuario o email primero", Toast.LENGTH_SHORT).show();
                 return;
@@ -213,6 +250,8 @@ public class LoginActivity extends AppCompatActivity {
     public static void logout(AppCompatActivity activity) {
         FirebaseAuth.getInstance().signOut();
         currentUser = null;
+        currentUid = null;
+        currentUsername = null;
         Toast.makeText(activity, "Sesión cerrada", Toast.LENGTH_SHORT).show();
         activity.startActivity(new Intent(activity, LoginActivity.class));
         activity.finish();

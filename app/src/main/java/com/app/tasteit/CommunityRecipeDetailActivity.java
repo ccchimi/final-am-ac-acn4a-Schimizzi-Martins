@@ -131,7 +131,7 @@ public class CommunityRecipeDetailActivity extends AppCompatActivity {
     private void bindData() {
         detailTitle.setText(recipe.getTitle());
         detailAuthor.setText("Por @" + recipe.getAuthor());
-        detailTime.setText("Tiempo: " + recipe.getCookingTime());
+        detailTime.setText("Tiempo: " + recipe.getCookingTime() + " min");
         detailDescription.setText(recipe.getDescription());
 
         Glide.with(this)
