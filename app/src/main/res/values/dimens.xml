@@ -33,7 +33,7 @@
     <dimen name="toolbar_elevation">6dp</dimen>
     <dimen name="icon_size">32dp</dimen>
 
-    <!-- Layouts específicos -->
+    <!-- Layouts especificos -->
     <dimen name="splash_logo_size">150dp</dimen>
     <dimen name="drawer_header_height">160dp</dimen>
     <dimen name="drawer_avatar_size">96dp</dimen>
