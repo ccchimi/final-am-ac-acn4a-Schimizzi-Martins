@@ -68,7 +68,7 @@
                 android:textColor="@color/textPrimary" />
         </LinearLayout>
 
-        <!-- Botón guardar -->
+        <!-- Boton guardar -->
         <Button
             android:id="@+id/btnSaveRecipe"
             android:layout_width="match_parent"
