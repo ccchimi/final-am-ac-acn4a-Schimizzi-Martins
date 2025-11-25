@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
             return true;
         });
 
-        // Menú de cuenta (icono arriba a la derecha)
+        // Menu de cuenta (icono arriba a la derecha)
         ImageView ivAccount = findViewById(R.id.ivAccount);
         AccountMenuHelper.setup(this, ivAccount);
 
