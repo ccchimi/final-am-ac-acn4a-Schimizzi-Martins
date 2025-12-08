@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- PERMISO NECESARIO PARA CARGAR IMAGENES DESDE INTERNET -->
+    <!-- Permiso necesario para carga de imágenes y APIs -->
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -15,7 +15,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TasteIT">
 
-        <!-- LOGIN como primera Activity -->
+        <!-- KEY DE GOOGLE MAPS -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
+
+        <!-- LOGIN (Activity principal) -->
         <activity
             android:name=".LoginActivity"
             android:exported="true">
@@ -25,7 +30,7 @@
             </intent-filter>
         </activity>
 
-        <!-- REGISTER (Nueva actividad para creacion de usuarios) -->
+        <!-- REGISTER -->
         <activity
             android:name=".RegisterActivity"
             android:exported="false" />
@@ -45,7 +50,7 @@
             android:name=".RecipesActivity"
             android:exported="false" />
 
-        <!-- DETALLE DE RECETA -->
+        <!-- DETALLE RECETA -->
         <activity
             android:name=".RecipeDetailActivity"
             android:exported="false" />
@@ -55,23 +60,30 @@
             android:name=".SplashActivity"
             android:exported="false" />
 
-        <!-- COMUNIDAD / FORO -->
+        <!-- COMUNIDAD -->
         <activity
             android:name=".CommunityActivity"
             android:exported="false" />
 
-        <!-- DETALLE DE RECETA DE COMUNIDAD -->
+        <!-- DETALLE COMUNIDAD -->
         <activity
             android:name=".CommunityRecipeDetailActivity"
             android:exported="false" />
 
-        <!-- FORMULARIO DE CREACION / EDICION DE RECETAS -->
+        <!-- FORMULARIO DE RECETAS -->
         <activity
             android:name=".RecipeFormActivity"
             android:exported="false" />
 
         <!-- RECUPERAR CONTRASEÑA -->
-        <activity android:name=".ForgotPasswordActivity" />
-    </application>
+        <activity
+            android:name=".ForgotPasswordActivity"
+            android:exported="false" />
 
+        <!-- MAPA -->
+        <activity
+            android:name=".MapActivity"
+            android:exported="false" />
+
+    </application>
 </manifest>
