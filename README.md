@@ -299,7 +299,8 @@ app/
 # Documentación entregada
 
 - Informe Parcial I  
-- Informe Parcial II  
+- Informe Parcial II
+- Informe FINAL  
 - Mockups completos  
 - Capturas finales  
 - Estructura Firebase  
