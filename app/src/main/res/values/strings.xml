@@ -54,6 +54,6 @@
     <string name="error_loading_recipes">Error al cargar recetas</string>
 
     <!-- GOOGLE MAPS -->
-    <string name="google_maps_key">TU_API_KEY_AQUI</string>
+    <string name="google_maps_key">AIzaSyBDkYNaJaq1rCNIz9_kA5UXT8QZe8_hc3Y</string>
 
 </resources>
