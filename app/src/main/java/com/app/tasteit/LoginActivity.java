@@ -16,13 +16,11 @@ import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 
 public class LoginActivity extends AppCompatActivity {
 
     private EditText etIdentifier, etPassword;
     private Button btnLogin, btnCreateUser;
-    private TextView tvForgot;
 
     private FirebaseAuth auth;
     private FirebaseFirestore db;
@@ -48,6 +46,7 @@ public class LoginActivity extends AppCompatActivity {
         btnCreateUser = findViewById(R.id.btnCreateUser);
         TextView tvForgotPassword = findViewById(R.id.tvForgotPassword);
 
+        // Flujo: ir a ForgotPasswordActivity
         tvForgotPassword.setOnClickListener(v -> {
             Intent intent = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
             startActivity(intent);
@@ -66,7 +65,6 @@ public class LoginActivity extends AppCompatActivity {
 
         btnLogin.setOnClickListener(v -> loginUser());
         btnCreateUser.setOnClickListener(v -> goToRegister());
-        tvForgot.setOnClickListener(v -> resetPassword());
     }
 
     private void loginUser() {
@@ -175,77 +173,6 @@ public class LoginActivity extends AppCompatActivity {
                 .addOnFailureListener(e -> {
                     // no es grave en realidad, solo no tendriamos username
                 });
-    }
-
-    private void resetPassword() {
-        final String text = etIdentifier.getText().toString().trim();
-
-        // Si lo que hay parece un email, usamos eso
-        if (text.contains("@")) {
-            if (!Patterns.EMAIL_ADDRESS.matcher(text).matches()) {
-                Toast.makeText(this, "Ingresá un email válido primero", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            auth.sendPasswordResetEmail(text)
-                    .addOnSuccessListener(v ->
-                            Toast.makeText(this,
-                                    "Se envió un email para recuperar la contraseña",
-                                    Toast.LENGTH_LONG).show()
-                    )
-                    .addOnFailureListener(e ->
-                            Toast.makeText(this,
-                                    "Error: " + e.getMessage(),
-                                    Toast.LENGTH_SHORT).show()
-                    );
-        } else {
-            // Si puso username, buscamos su email en Firestore y recien ahi mandamos el mail real a su casilla de correo
-            if (text.isEmpty()) {
-                Toast.makeText(this, "Ingresá usuario o email primero", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            db.collection("usuarios")
-                    .whereEqualTo("username", text)
-                    .limit(1)
-                    .get()
-                    .addOnSuccessListener(snapshot -> {
-                        if (snapshot == null || snapshot.isEmpty()) {
-                            Toast.makeText(this,
-                                    "No encontramos un usuario con ese nombre",
-                                    Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-
-                        String email = snapshot.getDocuments()
-                                .get(0)
-                                .getString("email");
-
-                        if (email == null || email.isEmpty()) {
-                            Toast.makeText(this,
-                                    "El usuario no tiene email asociado",
-                                    Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-
-                        auth.sendPasswordResetEmail(email)
-                                .addOnSuccessListener(v ->
-                                        Toast.makeText(this,
-                                                "Se envió un email a " + email,
-                                                Toast.LENGTH_LONG).show()
-                                )
-                                .addOnFailureListener(e ->
-                                        Toast.makeText(this,
-                                                "Error: " + e.getMessage(),
-                                                Toast.LENGTH_SHORT).show()
-                                );
-                    })
-                    .addOnFailureListener(e ->
-                            Toast.makeText(this,
-                                    "Error al buscar usuario: " + e.getMessage(),
-                                    Toast.LENGTH_SHORT).show()
-                    );
-        }
     }
 
     private void goToRegister() {
