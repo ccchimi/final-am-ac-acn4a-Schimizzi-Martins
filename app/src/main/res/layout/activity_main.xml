@@ -153,6 +153,16 @@
                     android:textColor="@android:color/white"/>
             </LinearLayout>
 
+            <!-- NUEVO: BOTON PARA ABRIR EL MAPA -->
+            <Button
+                android:id="@+id/btnOpenMap"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/button_height"
+                android:text="Ver mapa gastronómico"
+                android:backgroundTint="@color/primary"
+                android:textColor="@android:color/white"
+                android:layout_marginTop="@dimen/margin_s"/>
+
             <!-- EXPLORA POR TIPO -->
             <TextView
                 android:layout_width="wrap_content"

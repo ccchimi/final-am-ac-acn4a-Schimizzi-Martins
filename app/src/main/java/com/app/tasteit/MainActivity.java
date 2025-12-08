@@ -12,7 +12,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.ImageView;
-import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -63,6 +62,10 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("showFavorites", true);
                 startActivity(intent);
             }
+            else if (id == R.id.nav_mapa) {
+                // NUEVO: abrir mapa gastronómico desde el drawer
+                startActivity(new Intent(this, MapActivity.class));
+            }
             else if (id == R.id.nav_logout) {
                 LoginActivity.currentUser = null;
                 Toast.makeText(this, getString(R.string.session_closed), Toast.LENGTH_SHORT).show();
@@ -91,6 +94,11 @@ public class MainActivity extends AppCompatActivity {
 
         findViewById(R.id.btnCommunity).setOnClickListener(v ->
                 startActivity(new Intent(this, CommunityActivity.class))
+        );
+
+        // NUEVO: botón para abrir el mapa desde el home
+        findViewById(R.id.btnOpenMap).setOnClickListener(v ->
+                startActivity(new Intent(this, MapActivity.class))
         );
 
         // HERO
