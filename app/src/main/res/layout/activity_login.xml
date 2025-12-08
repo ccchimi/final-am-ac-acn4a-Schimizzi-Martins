@@ -72,13 +72,14 @@
 
             <!-- Olvidaste contraseña -->
             <TextView
-                android:id="@+id/tvForgot"
+                android:id="@+id/tvForgotPassword"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/login_forgot_password"
-                android:layout_marginTop="@dimen/margin_m"
-                android:layout_gravity="center_horizontal"
-                android:textColor="@color/textPrimary"/>
+                android:text="¿Olvidaste tu contraseña?"
+                android:textColor="@color/primary"
+                android:paddingTop="8dp"
+                android:clickable="true"
+                android:focusable="true" />
         </LinearLayout>
 
     </com.google.android.material.card.MaterialCardView>
