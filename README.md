@@ -1,5 +1,5 @@
 # Tastel – App Móvil de Recetas  
-### Proyecto Académico – Parcial I y II  
+### Proyecto Académico – Parcial I y II + Final 
 **Materia:** Aplicaciones Móviles (Da Vinci)  
 **Profesor:** Sergio Daniel Medina  
 **Integrantes:** Franco Martín Schimizzi · Melina Rocío Martins
@@ -320,8 +320,8 @@ El proyecto cumple y supera todas las consignas del Parcial I y II, logrando una
 
 LINK GITHUB:
 
-https://github.com/ccchimi/parcial-2-am-acn4a-Schimizzi-Martins
-https://github.com/ccchimi/parcial-2-am-acn4a-Schimizzi-Martins.git
+https://github.com/ccchimi/final-am-ac-acn4a-Schimizzi-Martins //
+https://github.com/ccchimi/final-am-ac-acn4a-Schimizzi-Martins.git
 
 sergiomedinaio y IJSagnella están invitados para colaboradores por las dudas
 
