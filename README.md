@@ -320,7 +320,7 @@ El proyecto cumple y supera todas las consignas del Parcial I y II, logrando una
 
 LINK GITHUB:
 
-https://github.com/ccchimi/final-am-ac-acn4a-Schimizzi-Martins
+https://github.com/ccchimi/final-am-ac-acn4a-Schimizzi-Martins //
 https://github.com/ccchimi/final-am-ac-acn4a-Schimizzi-Martins.git
 
 sergiomedinaio y IJSagnella están invitados para colaboradores por las dudas
