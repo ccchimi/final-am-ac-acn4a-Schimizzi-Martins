@@ -255,32 +255,111 @@ Las recetas publicadas por usuarios se convierten dinámicamente en objetos comp
 
 ---
 
+# 🔵 Mejoras Implementadas para el Final (Entrega Final)
+
+En la instancia final se incorporaron funcionalidades y mejoras que extienden el proyecto y brindan una experiencia más completa.
+
+---
+
+## 🗺️ Integración con Google Maps (Mapa Gastronómico)
+
+Nueva sección accesible desde el Drawer:
+
+- Google Maps SDK completamente integrado  
+- Marcadores temáticos:
+  - 🍝 Pastas  
+  - 🥗 Veggie  
+  - 🍔 Fast Food  
+  - 🍰 Postres  
+  - 🍣 Sushi  
+  - 🍕 Pizzerías  
+  - ☕ Cafeterías  
+- Drawer funcional dentro del mapa  
+- Cámara inicial sobre Microcentro (CABA)  
+- Estructura lista para markers dinámicos desde Firestore  
+
+---
+
+## 🔐 Recuperación de contraseña desde el Login
+
+Ahora el usuario puede recuperar su acceso:
+
+- Funciona con email **o username**  
+- Si ingresa username → se busca en Firestore → se convierte a email  
+- Firebase envía el correo automático  
+- Flujo más profesional y completo  
+
+---
+
+## 🎨 Feedback de UX mejorado
+
+Se agregaron mensajes descriptivos cuando no hay contenido:
+
+- Favoritos vacíos  
+- Comunidad sin recetas  
+- Búsquedas sin resultados  
+- Listas vacías en general  
+
+Esto evita pantallas “muertas” y orienta al usuario.
+
+---
+
+## 🚀 Mejoras en el Home y navegación
+
+- Acceso al mapa gastronómico desde el menú  
+- Ajustes visuales en cards, espaciados y tipografías  
+- Drawer actualizado con nuevas secciones  
+
+---
+
+## 🔧 Correcciones finales de API y CDN
+
+Para estabilidad del catálogo:
+
+- API apuntando al **repositorio final**  
+- Uso de **jsDelivr** para evitar límites de GitHub (HTTP 429)  
+- Validación final del archivo `recipes.json`  
+
+---
+
+## 🧭 Refactor de MapActivity
+
+Mejoras aplicadas:
+
+- Drawer + Toolbar integrado  
+- Marcadores categorizados  
+- Código modular y escalable  
+- UI coherente con el resto de la app  
+
+---
+
 # Estructura del proyecto
 
 ```
 app/
 ├── java/com.app.tasteit/
-│   ├── AccountMenuHelper.java
-│   ├── CommunityActivity.java
-│   ├── CommunityRecipe.java
-│   ├── CommunityRecipeAdapter.java
-│   ├── CommunityRecipeDetailActivity.java
-│   ├── CreateCommunityRecipeDialog.java
-│   ├── EditCommunityRecipeDialog.java
-│   ├── LoginActivity.java
-│   ├── RegisterActivity.java
-│   ├── ProfileActivity.java
-│   ├── RecipesApiService.java
-│   ├── RecipeAdapter.java
-│   ├── RecipeDetailActivity.java
-│   ├── RecipeFormActivity.java
-│   ├── SplashActivity.java
-│   └── RetrofitClient.java
+│ ├── AccountMenuHelper.java
+│ ├── CommunityActivity.java
+│ ├── CommunityRecipe.java
+│ ├── CommunityRecipeAdapter.java
+│ ├── CommunityRecipeDetailActivity.java
+│ ├── CreateCommunityRecipeDialog.java
+│ ├── EditCommunityRecipeDialog.java
+│ ├── LoginActivity.java
+│ ├── RegisterActivity.java
+│ ├── ProfileActivity.java
+│ ├── RecipesApiService.java
+│ ├── RecipeAdapter.java
+│ ├── RecipeDetailActivity.java
+│ ├── RecipeFormActivity.java
+│ ├── SplashActivity.java
+│ ├── MapActivity.java
+│ └── RetrofitClient.java
 ├── res/
-│   ├── layout/
-│   ├── drawable/
-│   ├── values/
-│   └── mipmap/
+│ ├── layout/
+│ ├── drawable/
+│ ├── values/
+│ └── mipmap/
 └── AndroidManifest.xml
 ```
 
@@ -291,8 +370,9 @@ app/
 1. Clonar el repositorio  
 2. Abrir en Android Studio  
 3. Agregar `google-services.json`  
-4. Sincronizar con Gradle  
-5. Ejecutar en emulador o dispositivo físico  
+4. Agregar la API Key de Google Maps  
+5. Sincronizar con Gradle  
+6. Ejecutar en emulador o dispositivo real  
 
 ---
 
@@ -319,16 +399,16 @@ El proyecto cumple y supera todas las consignas del Parcial I y II, logrando una
 
 # Links
 
-LINK GITHUB:
+**Repositorio GitHub:**  
+https://github.com/ccchimi/final-am-ac-acn4a-Schimizzi-Martins  
+https://github.com/ccchimi/final-am-ac-acn4a-Schimizzi-Martins.git  
 
-https://github.com/ccchimi/final-am-ac-acn4a-Schimizzi-Martins //
-https://github.com/ccchimi/final-am-ac-acn4a-Schimizzi-Martins.git
+(Acceso habilitado para: *sergiomedinaio* y *IJSagnella*)
 
-sergiomedinaio y IJSagnella están invitados para colaboradores por las dudas
-
-LINK FIGMA:
-
+**Figma Mockups:**  
 https://www.figma.com/design/FJAG6taGZRovizosxl6VxG/Mockups?node-id=0-1&t=a4yBUrBSA1g1g6Mb-1
+
+---
 
 # Autores
 
