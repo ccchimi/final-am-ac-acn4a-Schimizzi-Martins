@@ -7,7 +7,7 @@ public class RetrofitClient {
 
     // Usamos jsDelivr de cdn para evitar un error reiterativo "429" de GitHub
     private static final String BASE_URL =
-            "https://cdn.jsdelivr.net/gh/ccchimi/final-am-acn4a-Schimizzi-Martins@main/";
+            "https://cdn.jsdelivr.net/gh/ccchimi/final-am-ac-acn4a-Schimizzi-Martins@main/";
 
     private static Retrofit retrofit = null;
 
