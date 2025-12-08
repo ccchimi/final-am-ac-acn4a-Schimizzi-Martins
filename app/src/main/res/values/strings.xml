@@ -39,7 +39,6 @@
     <string name="remove_from_favorites">Quitar de favoritos</string>
     <string name="community_recipe_image">Imagen de receta de la comunidad</string>
 
-
     <!-- Recipe detail -->
     <string name="recipe_back">Volver</string>
     <string name="recipe_add_fav">⭐ Favorito</string>
@@ -53,4 +52,8 @@
 
     <!-- API -->
     <string name="error_loading_recipes">Error al cargar recetas</string>
+
+    <!-- GOOGLE MAPS -->
+    <string name="google_maps_key">TU_API_KEY_AQUI</string>
+
 </resources>
