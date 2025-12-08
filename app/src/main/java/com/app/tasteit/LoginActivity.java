@@ -46,7 +46,12 @@ public class LoginActivity extends AppCompatActivity {
         etPassword   = findViewById(R.id.etPassword);
         btnLogin     = findViewById(R.id.btnLogin);
         btnCreateUser = findViewById(R.id.btnCreateUser);
-        tvForgot     = findViewById(R.id.tvForgot);
+        TextView tvForgotPassword = findViewById(R.id.tvForgotPassword);
+
+        tvForgotPassword.setOnClickListener(v -> {
+            Intent intent = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
+            startActivity(intent);
+        });
 
         // Si ya esta logueado, lo mando directo al Home
         FirebaseUser user = auth.getCurrentUser();
