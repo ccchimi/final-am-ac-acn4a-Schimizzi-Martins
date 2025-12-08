@@ -280,7 +280,7 @@ Nueva sección accesible desde el Drawer:
 
 ---
 
-## 🔐 Recuperación de contraseña desde el Login
+## Recuperación de contraseña desde el Login
 
 Ahora el usuario puede recuperar su acceso:
 
@@ -291,7 +291,7 @@ Ahora el usuario puede recuperar su acceso:
 
 ---
 
-## 🎨 Feedback de UX mejorado
+## Feedback de UX mejorado
 
 Se agregaron mensajes descriptivos cuando no hay contenido:
 
@@ -304,7 +304,7 @@ Esto evita pantallas “muertas” y orienta al usuario.
 
 ---
 
-## 🚀 Mejoras en el Home y navegación
+## Mejoras en el Home y navegación
 
 - Acceso al mapa gastronómico desde el menú  
 - Ajustes visuales en cards, espaciados y tipografías  
@@ -312,7 +312,7 @@ Esto evita pantallas “muertas” y orienta al usuario.
 
 ---
 
-## 🔧 Correcciones finales de API y CDN
+## Correcciones finales de API y CDN
 
 Para estabilidad del catálogo:
 
@@ -322,7 +322,7 @@ Para estabilidad del catálogo:
 
 ---
 
-## 🧭 Refactor de MapActivity
+## Refactor de MapActivity
 
 Mejoras aplicadas:
 
